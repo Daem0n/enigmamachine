@@ -578,9 +578,6 @@ class TestEnigmamachine < Test::Unit::TestCase
             assert_equal @num_videos + 1, Video.count
           end
 
-          should "redirect to /videos" do
-            assert_equal "http://example.org/videos", last_request.url
-          end
         end
 
         context "when video[callback_url] is set" do
