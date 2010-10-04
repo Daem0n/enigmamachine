@@ -17,6 +17,8 @@ begin
     gem.add_dependency "rack-flash"
     gem.add_dependency "ruby-debug"
     gem.add_dependency "sinatra", ">=1.0.0"
+    gem.add_dependency "sinatra-respond_to", ">=0.2.0"
+    gem.add_dependency "json_pure", ">=1.4.6"
     gem.add_dependency "streamio-ffmpeg", ">=0.7.3"
     gem.add_dependency "thin"
 

@@ -2,6 +2,7 @@
 #
 require 'rubygems'
 require 'sinatra/base'
+require 'sinatra/respond_to'
 require 'data_mapper'
 require 'ruby-debug'
 require 'eventmachine'
@@ -11,6 +12,7 @@ require 'dm-migrations'
 require 'open3'
 require 'logger'
 require 'streamio-ffmpeg'
+require 'json'
 
 # Extensions to Sinatra
 #
@@ -29,6 +31,8 @@ require File.dirname(__FILE__) + '/enigmamachine/encoding_queue'
 
 class EnigmaMachine < Sinatra::Base
 
+  self.register Sinatra::RespondTo
+  
   # Database config
   #
   configure :production do
@@ -264,10 +268,16 @@ class EnigmaMachine < Sinatra::Base
     @encoder = Encoder.get(params[:encoder_id])
     @video.encoder = @encoder
     if @video.save
-      redirect '/videos'
+      respond_to do |format|
+        format.html { redirect '/videos' }
+        format.json { @video.id.to_json }
+      end
     else
       @encoders = Encoder.all
-      erb :'videos/new'
+      respond_to do |format|
+        format.html { erb :'videos/new' }
+        format.json { halt 406 }
+      end
     end
   end
 

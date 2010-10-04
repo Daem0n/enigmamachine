@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dave Hrycyszyn"]
-  s.date = %q{2010-09-26}
+  s.date = %q{2010-10-05}
   s.default_executable = %q{enigmamachine}
   s.description = %q{A RESTful video encoder which you can use as either a front-end to ffmpeg or headless on a server.}
   s.email = %q{dave@caprica}
@@ -46,22 +46,22 @@ Gem::Specification.new do |s|
      "lib/enigmamachine/public/images/img05.gif",
      "lib/enigmamachine/public/images/img06.jpg",
      "lib/enigmamachine/public/images/spacer.gif",
-     "lib/enigmamachine/views/encoders/edit.erb",
-     "lib/enigmamachine/views/encoders/encoder.erb",
-     "lib/enigmamachine/views/encoders/encoding_task.erb",
-     "lib/enigmamachine/views/encoders/form.erb",
-     "lib/enigmamachine/views/encoders/index.erb",
-     "lib/enigmamachine/views/encoders/new.erb",
-     "lib/enigmamachine/views/encoders/show.erb",
-     "lib/enigmamachine/views/encoding_tasks/edit.erb",
-     "lib/enigmamachine/views/encoding_tasks/form.erb",
-     "lib/enigmamachine/views/encoding_tasks/new.erb",
-     "lib/enigmamachine/views/index.erb",
-     "lib/enigmamachine/views/layout.erb",
-     "lib/enigmamachine/views/videos/form.erb",
-     "lib/enigmamachine/views/videos/index.erb",
-     "lib/enigmamachine/views/videos/new.erb",
-     "lib/enigmamachine/views/videos/video.erb",
+     "lib/enigmamachine/views/encoders/edit.html.erb",
+     "lib/enigmamachine/views/encoders/encoder.html.erb",
+     "lib/enigmamachine/views/encoders/encoding_task.html.erb",
+     "lib/enigmamachine/views/encoders/form.html.erb",
+     "lib/enigmamachine/views/encoders/index.html.erb",
+     "lib/enigmamachine/views/encoders/new.html.erb",
+     "lib/enigmamachine/views/encoders/show.html.erb",
+     "lib/enigmamachine/views/encoding_tasks/edit.html.erb",
+     "lib/enigmamachine/views/encoding_tasks/form.html.erb",
+     "lib/enigmamachine/views/encoding_tasks/new.html.erb",
+     "lib/enigmamachine/views/index.html.erb",
+     "lib/enigmamachine/views/layout.html.erb",
+     "lib/enigmamachine/views/videos/form.html.erb",
+     "lib/enigmamachine/views/videos/index.html.erb",
+     "lib/enigmamachine/views/videos/new.html.erb",
+     "lib/enigmamachine/views/videos/video.html.erb",
      "lib/ext/array_ext.rb",
      "lib/ext/partials.rb",
      "lib/generators/config.yml",
@@ -99,6 +99,8 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rack-flash>, [">= 0"])
       s.add_runtime_dependency(%q<ruby-debug>, [">= 0"])
       s.add_runtime_dependency(%q<sinatra>, [">= 1.0.0"])
+      s.add_runtime_dependency(%q<sinatra-respond_to>, [">= 0.2.0"])
+      s.add_runtime_dependency(%q<json_pure>, [">= 1.4.6"])
       s.add_runtime_dependency(%q<streamio-ffmpeg>, [">= 0.7.3"])
       s.add_runtime_dependency(%q<thin>, [">= 0"])
     else
@@ -109,6 +111,8 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rack-flash>, [">= 0"])
       s.add_dependency(%q<ruby-debug>, [">= 0"])
       s.add_dependency(%q<sinatra>, [">= 1.0.0"])
+      s.add_dependency(%q<sinatra-respond_to>, [">= 0.2.0"])
+      s.add_dependency(%q<json_pure>, [">= 1.4.6"])
       s.add_dependency(%q<streamio-ffmpeg>, [">= 0.7.3"])
       s.add_dependency(%q<thin>, [">= 0"])
     end
@@ -120,6 +124,8 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rack-flash>, [">= 0"])
     s.add_dependency(%q<ruby-debug>, [">= 0"])
     s.add_dependency(%q<sinatra>, [">= 1.0.0"])
+    s.add_dependency(%q<sinatra-respond_to>, [">= 0.2.0"])
+    s.add_dependency(%q<json_pure>, [">= 1.4.6"])
     s.add_dependency(%q<streamio-ffmpeg>, [">= 0.7.3"])
     s.add_dependency(%q<thin>, [">= 0"])
   end
