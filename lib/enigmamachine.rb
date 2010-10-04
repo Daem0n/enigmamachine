@@ -281,6 +281,17 @@ class EnigmaMachine < Sinatra::Base
     end
   end
 
+  ## Get transcode progress in json format (from AJAX POST request)
+  #
+  post '/videos/:id' do |id|
+    video = Video.get(id)
+    halt 406 if video.nil?
+    respond_to do |format|
+      format.html { redirect '/videos' } # Go to the all videos page. This query not for html request
+      format.json { video.to_json }
+    end
+  end
+
   # Deletes a video.
   #
   delete '/videos/:id' do |id|
