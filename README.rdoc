@@ -57,6 +57,18 @@ with the params:
  "video[callback_url]=http://example.org/call/back/id" # an optional callback url
  "encoder_id=1" # the id of an encoder defined in your enigmamachine database
 
+or you can make request like this with same params:
+
+ POST http://localhost:2002/videos.json
+
+and get an id of video.
+Later you can make request like this:
+
+ POST http://localhost:2002/videos/<id>.json
+
+and get info about current state of video file (unencoded, encoding (with progress
+in percent), complete)
+
 The enigmamachine will run all encoding tasks on the video, while your web
 application will be free to continue serving requests happily.  If a second video
 is uploaded while the first one is still encoding, it will be placed in a queue.
