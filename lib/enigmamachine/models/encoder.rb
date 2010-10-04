@@ -37,7 +37,7 @@ class Encoder
     encoding_operation = proc {
       video.update(:state => 'encoding')
       movie.transcode(video.file + task.output_file_suffix, task.command) do |p|
-        puts p*100
+        video.update(:progress => (p*100).floor)
       end
     }
     completion_callback = proc {|result|

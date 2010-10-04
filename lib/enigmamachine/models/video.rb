@@ -15,6 +15,7 @@ class Video
   property :updated_at, DateTime
   property :encoder_id, Integer, :required => true
   property :callback_url, String
+  property :progress, Integer
 
   validates_with_method :file, :method => :check_file
   validates_uniqueness_of :file, :scope => :encoder_id,
