@@ -213,7 +213,7 @@ class TestEnigmamachine < Test::Unit::TestCase
         end
       end
 
-    context "and invalid encoder params" do
+      context "and invalid encoder params" do
         setup do
           put "/encoders/#{Encoder.first.id}", {
             :id => Encoder.first.id,
@@ -470,84 +470,154 @@ class TestEnigmamachine < Test::Unit::TestCase
         assert_equal 401, status
       end
     end
-  end
 
-  context "with credentials" do
-    setup do
-      get "/videos/new", {}, basic_auth_creds
-    end
+    context "with credentials" do
+      setup do
+        get "/videos/new", {}, basic_auth_creds
+      end
 
-    should "work" do
-      assert last_response.ok?
+      should "work" do
+        assert last_response.ok?
+      end
     end
   end
 
   context "on POST to /videos" do
-    context "without credentials" do
-      setup do
-        post "/videos", {:video => Video.plan}
+    context "with HTML request" do
+      context "without credentials" do
+        setup do
+          post "/videos", {:video => Video.plan}
+        end
+
+        should "respond with security error" do
+          assert !last_response.ok?
+          assert_equal 401, status
+        end
       end
 
-      should "respond with security error" do
-        assert !last_response.ok?
-        assert_equal 401, status
+      context "with credentials" do
+        context "and valid video params" do
+          setup do
+            @num_videos = Video.count
+            post "/videos", {
+              :video => Video.plan,
+              :encoder_id => Encoder.make.id}, basic_auth_creds
+            follow_redirect!
+          end
+
+          should "create a video" do
+            assert_equal @num_videos + 1, Video.count
+          end
+
+          should "redirect to /videos" do
+            assert_equal "http://example.org/videos", last_request.url
+          end
+        end
+
+        context "when video[callback_url] is set" do
+          setup do
+            @num_videos = Video.count
+            post "/videos", {
+              :video => Video.plan(:with_callback),
+              :encoder_id => Encoder.make.id}, basic_auth_creds
+            follow_redirect!
+          end
+
+          should "create a video" do
+            assert_equal @num_videos + 1, Video.count
+          end
+
+          should "redirect to /videos" do
+            assert_equal "http://example.org/videos", last_request.url
+          end
+        end
+
+        context "and invalid video params" do
+          setup do
+            @num_videos = Video.count
+            post "/videos", {
+              :video => Video.plan.merge(:file => ""),
+              :encoder_id => Encoder.make.id}, basic_auth_creds
+          end
+
+          should "not create a new video" do
+            assert_equal @num_videos, Video.count
+          end
+
+          should "redisplay the video form" do
+            assert last_response.ok?
+          end
+        end
       end
     end
 
-    context "with credentials" do
-      context "and valid video params" do
+    context "with JSON request" do
+      context "without credentials" do
         setup do
-          @num_videos = Video.count
-          post "/videos", {
-            :video => Video.plan,
-            :encoder_id => Encoder.make.id}, basic_auth_creds
-          follow_redirect!
+          post "/videos.json", {:video => Video.plan}
         end
 
-        should "create a video" do
-          assert_equal @num_videos + 1, Video.count
-        end
-
-        should "redirect to /videos" do
-          assert_equal "http://example.org/videos", last_request.url
+        should "respond with security error" do
+          assert !last_response.ok?
+          assert_equal 401, status
         end
       end
 
-      context "when video[callback_url] is set" do
-        setup do
-          @num_videos = Video.count
-          post "/videos", {
-            :video => Video.plan(:with_callback),
-            :encoder_id => Encoder.make.id}, basic_auth_creds
-          follow_redirect!
+      context "with credentials" do
+        context "and valid video params" do
+          setup do
+            @num_videos = Video.count
+            post "/videos.json", {
+              :video => Video.plan,
+              :encoder_id => Encoder.make.id}, 
+              basic_auth_creds
+          end
+
+          should "create a video" do
+            assert last_response.ok?
+            assert_equal @num_videos + 1, Video.count
+          end
+
+          should "redirect to /videos" do
+            assert_equal "http://example.org/videos", last_request.url
+          end
         end
 
-        should "create a video" do
-          assert_equal @num_videos + 1, Video.count
+        context "when video[callback_url] is set" do
+          setup do
+            @num_videos = Video.count
+            post "/videos.json", {
+              :video => Video.plan(:with_callback),
+              :encoder_id => Encoder.make.id}, basic_auth_creds
+          end
+
+          should "create a video and return id of video" do
+            assert !last_request.params.blank?
+            assert_equal @num_videos + 1, Video.count
+            assert last_response.ok?
+          end
+
         end
 
-        should "redirect to /videos" do
-          assert_equal "http://example.org/videos", last_request.url
-        end
-      end
+        context "and invalid video params" do
+          setup do
+            @num_videos = Video.count
+            post "/videos.json", {
+              :video => Video.plan.merge(:file => ""),
+              :encoder_id => Encoder.make.id}, basic_auth_creds
+          end
 
-      context "and invalid video params" do
-        setup do
-          @num_videos = Video.count
-          post "/videos", {
-            :video => Video.plan.merge(:file => ""),
-            :encoder_id => Encoder.make.id}, basic_auth_creds
-        end
+          should "not create a new video" do
+            assert_equal @num_videos, Video.count
+          end
 
-        should "not create a new video" do
-          assert_equal @num_videos, Video.count
-        end
-
-        should "redisplay the video form" do
-          assert last_response.ok?
+          should "raise a 406 http status code" do
+            assert_equal 406, last_response.status
+          end
         end
       end
     end
+
   end
 
 end
