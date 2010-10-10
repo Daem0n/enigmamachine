@@ -36,7 +36,7 @@ class Encoder
     movie = FFMPEG::Movie.new(video.file)
     encoding_operation = proc {
       video.update(:state => 'encoding')
-      movie.transcode(File.dirname(video.file) +
+      movie.transcode(File.dirname(video.file) + "/" +
                       File.basename(video.file, File.extname(video.file)) +
                       task.output_file_suffix,
                       task.command) do |p|
