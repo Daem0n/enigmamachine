@@ -31,7 +31,7 @@ class Video
   #
   def notify_complete
     begin
-      Net::HTTP.get(URI.parse(video.callback_url)) unless callback_url.nil?
+      Net::HTTP.get(URI.parse(callback_url)) unless callback_url.nil?
     rescue
     end
   end
